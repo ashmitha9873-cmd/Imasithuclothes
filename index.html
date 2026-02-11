@@ -1,0 +1,720 @@
+<!DOCTYPE html>  <html lang="en" class="scroll-smooth">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Fashion With Clothes | Luxury Fashion Store</title>  
+    <meta name="description" content="Discover the latest fashion trends at Fashion With Clothes. Premium clothing for men and women with elegant style and quality.">  <!-- Tailwind CSS -->  
+<script src="https://cdn.tailwindcss.com"></script>  
+  
+<!-- Google Fonts -->  
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">  
+  
+<!-- Font Awesome -->  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
+  
+<!-- Tailwind Config -->  
+<script>  
+    tailwind.config = {  
+        darkMode: 'class',  
+        theme: {  
+            extend: {  
+                fontFamily: {  
+                    serif: ['Playfair Display', 'serif'],  
+                    sans: ['Inter', 'sans-serif'],  
+                },  
+                colors: {  
+                    gold: {  
+                        400: '#fbbf24',  
+                        500: '#f59e0b',  
+                        600: '#d97706',  
+                    },  
+                    cream: '#faf9f6',  
+                }  
+            }  
+        }  
+    }  
+</script>  
+  
+<style>  
+    /* Custom Styles */  
+    .hero-slider {  
+        animation: fadeSlide 15s infinite;  
+    }  
+      
+    @keyframes fadeSlide {  
+        0%, 33% { opacity: 1; }  
+        36%, 66% { opacity: 0; }  
+        69%, 100% { opacity: 1; }  
+    }  
+      
+    .product-card:hover .product-overlay {  
+        opacity: 1;  
+    }  
+      
+    .product-card:hover img {  
+        transform: scale(1.05);  
+    }  
+      
+    .scroll-reveal {  
+        opacity: 0;  
+        transform: translateY(30px);  
+        transition: all 0.8s ease-out;  
+    }  
+      
+    .scroll-reveal.active {  
+        opacity: 1;  
+        transform: translateY(0);  
+    }  
+      
+    .loader {  
+        border-top-color: #f59e0b;  
+        -webkit-animation: spinner 1s linear infinite;  
+        animation: spinner 1s linear infinite;  
+    }  
+      
+    @keyframes spinner {  
+        0% { transform: rotate(0deg); }  
+        100% { transform: rotate(360deg); }  
+    }  
+      
+    /* Smooth scrollbar */  
+    ::-webkit-scrollbar {  
+        width: 8px;  
+    }  
+    ::-webkit-scrollbar-track {  
+        background: #f1f1f1;  
+    }  
+    ::-webkit-scrollbar-thumb {  
+        background: #888;  
+        border-radius: 4px;  
+    }  
+    ::-webkit-scrollbar-thumb:hover {  
+        background: #555;  
+    }  
+</style>
+
+</head>  
+<body class="font-sans text-gray-800 bg-white antialiased transition-colors duration-300 dark:bg-gray-900 dark:text-white">  <!-- Loading Screen -->  
+<div id="loader" class="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex items-center justify-center transition-opacity duration-500">  
+    <div class="text-center">  
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4 mx-auto"></div>  
+        <h2 class="font-serif text-xl text-gold-600">Fashion With Clothes</h2>  
+    </div>  
+</div>  
+
+<!-- Navigation -->  
+<nav id="navbar" class="fixed w-full z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md transition-all duration-300 border-b border-gray-100 dark:border-gray-800">  
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
+        <div class="flex justify-between items-center h-20">  
+            <!-- Logo -->  
+            <a href="#" onclick="router('home')" class="flex items-center space-x-2">  
+                <span class="font-serif text-2xl font-bold tracking-wider text-black dark:text-white">FWC</span>  
+                <span class="hidden sm:block text-xs uppercase tracking-widest text-gold-600">Fashion With Clothes</span>  
+            </a>  
+
+            <!-- Desktop Menu -->  
+            <div class="hidden md:flex items-center space-x-8">  
+                <a href="#" onclick="router('home')" class="nav-link text-sm uppercase tracking-widest hover:text-gold-600 transition">Home</a>  
+                <a href="#" onclick="router('shop')" class="nav-link text-sm uppercase tracking-widest hover:text-gold-600 transition">Shop</a>  
+                <a href="#" onclick="router('about')" class="nav-link text-sm uppercase tracking-widest hover:text-gold-600 transition">About</a>  
+                <a href="#" onclick="router('contact')" class="nav-link text-sm uppercase tracking-widest hover:text-gold-600 transition">Contact</a>  
+            </div>  
+
+            <!-- Icons -->  
+            <div class="flex items-center space-x-4">  
+                <button onclick="toggleDarkMode()" class="p-2 hover:text-gold-600 transition">  
+                    <i class="fas fa-moon dark:hidden"></i>  
+                    <i class="fas fa-sun hidden dark:block text-gold-400"></i>  
+                </button>  
+                <button onclick="router('cart')" class="relative p-2 hover:text-gold-600 transition">  
+                    <i class="fas fa-shopping-bag text-lg"></i>  
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-gold-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full opacity-0 transition-opacity">0</span>  
+                </button>  
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2">  
+                    <i class="fas fa-bars text-xl"></i>  
+                </button>  
+            </div>  
+        </div>  
+    </div>  
+
+    <!-- Mobile Menu -->  
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800">  
+        <div class="px-4 pt-2 pb-6 space-y-1">  
+            <a href="#" onclick="router('home'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold-600">Home</a>  
+            <a href="#" onclick="router('shop'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold-600">Shop</a>  
+            <a href="#" onclick="router('about'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold-600">About</a>  
+            <a href="#" onclick="router('contact'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-gold-600">Contact</a>  
+        </div>  
+    </div>  
+</nav>  
+
+<!-- Main Content -->  
+<main id="app" class="pt-20 min-h-screen">  
+    <!-- Content injected by JavaScript -->  
+</main>  
+
+<!-- Footer -->  
+<footer class="bg-gray-900 text-white pt-16 pb-8">  
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">  
+            <div>  
+                <h3 class="font-serif text-2xl mb-4">FWC</h3>  
+                <p class="text-gray-400 text-sm leading-relaxed">Redefining modern fashion with sustainable luxury and timeless designs for the contemporary wardrobe.</p>  
+            </div>  
+            <div>  
+                <h4 class="font-bold uppercase tracking-widest text-sm mb-4 text-gold-500">Quick Links</h4>  
+                <ul class="space-y-2 text-sm text-gray-400">  
+                    <li><a href="#" onclick="router('shop')" class="hover:text-white transition">Shop All</a></li>  
+                    <li><a href="#" onclick="router('about')" class="hover:text-white transition">About Us</a></li>  
+                    <li><a href="#" onclick="router('contact')" class="hover:text-white transition">Contact</a></li>  
+                    <li><a href="#" class="hover:text-white transition">Size Guide</a></li>  
+                </ul>  
+            </div>  
+            <div>  
+                <h4 class="font-bold uppercase tracking-widest text-sm mb-4 text-gold-500">Customer Care</h4>  
+                <ul class="space-y-2 text-sm text-gray-400">  
+                    <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>  
+                    <li><a href="#" class="hover:text-white transition">Returns</a></li>  
+                    <li><a href="#" class="hover:text-white transition">FAQ</a></li>  
+                    <li><a href="#" class="hover:text-white transition">Track Order</a></li>  
+                </ul>  
+            </div>  
+            <div>  
+                <h4 class="font-bold uppercase tracking-widest text-sm mb-4 text-gold-500">Newsletter</h4>  
+                <p class="text-xs text-gray-400 mb-4">Subscribe for exclusive offers and updates.</p>  
+                <form onsubmit="event.preventDefault(); showToast('Thank you for subscribing!')" class="flex">  
+                    <input type="email" placeholder="Your email" required class="flex-1 bg-gray-800 border-none px-4 py-2 text-sm focus:ring-1 focus:ring-gold-500">  
+                    <button type="submit" class="bg-gold-600 px-4 py-2 text-sm font-bold hover:bg-gold-700 transition">JOIN</button>  
+                </form>  
+                <div class="flex space-x-4 mt-6">  
+                    <a href="#" class="text-gray-400 hover:text-gold-500 transition"><i class="fab fa-instagram"></i></a>  
+                    <a href="#" class="text-gray-400 hover:text-gold-500 transition"><i class="fab fa-facebook"></i></a>  
+                    <a href="#" class="text-gray-400 hover:text-gold-500 transition"><i class="fab fa-twitter"></i></a>  
+                    <a href="#" class="text-gray-400 hover:text-gold-500 transition"><i class="fab fa-pinterest"></i></a>  
+                </div>  
+            </div>  
+        </div>  
+        <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">  
+            <p>&copy; 2024 Fashion With Clothes. All rights reserved.</p>  
+        </div>  
+    </div>  
+</footer>  
+
+<!-- Scroll to Top -->  
+<button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 bg-gold-600 text-white w-12 h-12 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-gold-700 z-30">  
+    <i class="fas fa-arrow-up"></i>  
+</button>  
+
+<!-- Toast Notification -->  
+<div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-6 py-4 rounded shadow-2xl transform translate-y-24 transition-transform duration-300 z-50 flex items-center gap-3 border-l-4 border-gold-500">  
+    <i class="fas fa-check-circle text-gold-500"></i>  
+    <span id="toast-message">Notification</span>  
+</div>  
+
+<!-- JavaScript -->  
+<script>  
+    // Data  
+    const products = [  
+        { id: 1, name: "Classic White Shirt", category: "Women", price: 89, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&auto=format&fit=crop", sizes: ["XS", "S", "M", "L"], description: "Timeless elegance in pure cotton. Perfect for any occasion." },  
+        { id: 2, name: "Slim Fit Blazer", category: "Men", price: 199, image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop", sizes: ["S", "M", "L", "XL"], description: "Sophisticated tailoring for the modern gentleman." },  
+        { id: 3, name: "Summer Floral Dress", category: "Women", price: 129, image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&auto=format&fit=crop", sizes: ["XS", "S", "M", "L"], description: "Breezy and beautiful for those sunny days." },  
+        { id: 4, name: "Denim Jacket", category: "Men", price: 149, image: "https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?w=800&auto=format&fit=crop", sizes: ["M", "L", "XL"], description: "Classic denim with a modern twist." },  
+        { id: 5, name: "Silk Evening Gown", category: "Women", price: 299, image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop", sizes: ["S", "M", "L"], description: "Luxurious silk for your special moments." },  
+        { id: 6, name: "Chino Pants", category: "Men", price: 79, image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&auto=format&fit=crop", sizes: ["30", "32", "34", "36"], description: "Smart casual essentials for every wardrobe." },  
+        { id: 7, name: "Cashmere Sweater", category: "Women", price: 189, image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop", sizes: ["S", "M", "L"], description: "Ultimate comfort in premium cashmere." },  
+        { id: 8, name: "Leather Belt", category: "Men", price: 59, image: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=800&auto=format&fit=crop", sizes: ["One Size"], description: "Genuine leather craftsmanship." },  
+    ];  
+
+    // State  
+    let cart = [];  
+    let currentCategory = 'All';  
+
+    // Initialize  
+    document.addEventListener('DOMContentLoaded', () => {  
+        // Remove loader  
+        setTimeout(() => {  
+            document.getElementById('loader').style.opacity = '0';  
+            setTimeout(() => document.getElementById('loader').remove(), 500);  
+        }, 1000);  
+
+        router('home');  
+        setupScrollListener();  
+    });  
+
+    // Router  
+    function router(page, params = null) {  
+        const app = document.getElementById('app');  
+        window.scrollTo(0, 0);  
+          
+        switch(page) {  
+            case 'home':  
+                app.innerHTML = renderHome();  
+                initHomeSlider();  
+                break;  
+            case 'shop':  
+                app.innerHTML = renderShop();  
+                filterProducts(currentCategory);  
+                break;  
+            case 'product':  
+                app.innerHTML = renderProductDetail(params);  
+                break;  
+            case 'cart':  
+                app.innerHTML = renderCart();  
+                break;  
+            case 'about':  
+                app.innerHTML = renderAbout();  
+                break;  
+            case 'contact':  
+                app.innerHTML = renderContact();  
+                break;  
+        }  
+          
+        initScrollReveal();  
+    }  
+
+    // Views  
+    function renderHome() {  
+        return `  
+            <!-- Hero Slider -->  
+            <section class="relative h-[80vh] overflow-hidden">  
+                <div class="absolute inset-0 hero-slide active">  
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&auto=format&fit=crop" class="w-full h-full object-cover" alt="Fashion">  
+                    <div class="absolute inset-0 bg-black/30"></div>  
+                    <div class="absolute inset-0 flex items-center justify-center text-center text-white px-4">  
+                        <div class="max-w-3xl scroll-reveal">  
+                            <p class="text-sm uppercase tracking-[0.3em] mb-4 text-gold-400">New Collection 2024</p>  
+                            <h1 class="font-serif text-5xl md:text-7xl mb-6">Wear Your Style</h1>  
+                            <p class="text-lg mb-8 text-gray-200">Discover the latest trends in fashion</p>  
+                            <button onclick="router('shop')" class="bg-gold-600 text-white px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-gold-700 transition transform hover:scale-105">Shop Now</button>  
+                        </div>  
+                    </div>  
+                </div>  
+            </section>  
+
+            <!-- Featured Categories -->  
+            <section class="py-20 px-4 max-w-7xl mx-auto">  
+                <div class="text-center mb-16 scroll-reveal">  
+                    <h2 class="font-serif text-4xl mb-4">Shop by Category</h2>  
+                    <div class="w-24 h-1 bg-gold-500 mx-auto"></div>  
+                </div>  
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">  
+                    ${['Women', 'Men', 'New Arrivals'].map((cat, i) => `  
+                        <div class="group relative overflow-hidden h-[500px] cursor-pointer scroll-reveal" onclick="router('shop'); currentCategory='${cat}'; filterProducts('${cat}')" style="animation-delay: ${i * 100}ms">  
+                            <img src="${cat === 'Women' ? 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800' : cat === 'Men' ? 'https://images.unsplash.com/photo-1490578474895-699cd4d2ff5f?w=800' : 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=800'}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="${cat}">  
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>  
+                            <div class="absolute bottom-8 left-8 text-white">  
+                                <h3 class="font-serif text-3xl mb-2">${cat}</h3>  
+                                <p class="text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300">Explore Collection →</p>  
+                            </div>  
+                        </div>  
+                    `).join('')}  
+                </div>  
+            </section>  
+
+            <!-- Featured Products -->  
+            <section class="py-20 bg-gray-50 dark:bg-gray-800">  
+                <div class="max-w-7xl mx-auto px-4">  
+                    <div class="flex justify-between items-end mb-12 scroll-reveal">  
+                        <div>  
+                            <h2 class="font-serif text-4xl mb-2">Featured Products</h2>  
+                            <p class="text-gray-500">Handpicked favorites just for you</p>  
+                        </div>  
+                        <button onclick="router('shop')" class="hidden md:block text-gold-600 font-bold uppercase text-sm tracking-widest hover:text-gold-700 transition">View All</button>  
+                    </div>  
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">  
+                        ${products.slice(0, 4).map(p => productCard(p)).join('')}  
+                    </div>  
+                </div>  
+            </section>  
+
+            <!-- Newsletter -->  
+            <section class="py-24 bg-black text-white text-center px-4">  
+                <div class="max-w-2xl mx-auto scroll-reveal">  
+                    <h2 class="font-serif text-4xl md:text-5xl mb-6">Join the Club</h2>  
+                    <p class="text-gray-400 mb-8">Subscribe to receive exclusive offers, early access to new arrivals, and style tips.</p>  
+                    <form onsubmit="event.preventDefault(); showToast('Welcome to the club!')" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">  
+                        <input type="email" placeholder="Enter your email" required class="flex-1 px-6 py-3 bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold-500">  
+                        <button type="submit" class="bg-gold-600 px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-gold-700 transition">Subscribe</button>  
+                    </form>  
+                </div>  
+            </section>  
+        `;  
+    }  
+
+    function renderShop() {  
+        return `  
+            <div class="bg-gray-50 dark:bg-gray-900 min-h-screen pb-20">  
+                <!-- Header -->  
+                <div class="bg-white dark:bg-gray-800 py-12 mb-8 border-b dark:border-gray-700">  
+                    <div class="max-w-7xl mx-auto px-4 text-center">  
+                        <h1 class="font-serif text-5xl mb-4">The Shop</h1>  
+                        <p class="text-gray-500 max-w-2xl mx-auto">Curated collection of premium fashion essentials</p>  
+                    </div>  
+                </div>  
+
+                <div class="max-w-7xl mx-auto px-4">  
+                    <!-- Filters -->  
+                    <div class="flex flex-wrap justify-center gap-4 mb-12 scroll-reveal">  
+                        ${['All', 'Women', 'Men', 'New Arrivals'].map(cat => `  
+                            <button onclick="filterProducts('${cat}')" class="filter-btn ${currentCategory === cat ? 'bg-gold-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'} px-6 py-2 rounded-full text-sm font-medium transition hover:shadow-lg" data-category="${cat}">  
+                                ${cat}  
+                            </button>  
+                        `).join('')}  
+                    </div>  
+
+                    <!-- Product Grid -->  
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">  
+                        <!-- Products injected here -->  
+                    </div>  
+                </div>  
+            </div>  
+        `;  
+    }  
+
+    function renderProductDetail(id) {  
+        const product = products.find(p => p.id === id);  
+        return `  
+            <div class="max-w-7xl mx-auto px-4 py-12 animate-fade-in">  
+                <button onclick="history.back()" class="mb-8 text-sm uppercase tracking-widest hover:text-gold-600 transition"><i class="fas fa-arrow-left mr-2"></i> Back</button>  
+                  
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">  
+                    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">  
+                        <img src="${product.image}" class="w-full h-full object-cover" alt="${product.name}">  
+                    </div>  
+                      
+                    <div class="flex flex-col justify-center">  
+                        <span class="text-gold-600 text-sm uppercase tracking-widest mb-2">${product.category}</span>  
+                        <h1 class="font-serif text-4xl md:text-5xl mb-4">${product.name}</h1>  
+                        <p class="text-3xl font-light mb-6 text-gold-600">$${product.price}</p>  
+                        <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">${product.description}</p>  
+                          
+                        <div class="mb-8">  
+                            <label class="block text-sm font-bold uppercase tracking-widest mb-3">Select Size</label>  
+                            <div class="flex gap-3">  
+                                ${product.sizes.map(size => `  
+                                    <button onclick="selectSize(this)" class="size-btn w-12 h-12 border-2 border-gray-300 dark:border-gray-600 rounded flex items-center justify-center text-sm font-medium hover:border-gold-600 transition">${size}</button>  
+                                `).join('')}  
+                            </div>  
+                        </div>  
+                          
+                        <div class="flex gap-4 mb-8">  
+                            <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded">  
+                                <button onclick="this.nextElementSibling.stepDown()" class="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">-</button>  
+                                <input type="number" min="1" value="1" class="w-16 text-center border-none bg-transparent" readonly>  
+                                <button onclick="this.previousElementSibling.stepUp()" class="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">+</button>  
+                            </div>  
+                            <button onclick="addToCart(${product.id}); showToast('Added to cart!')" class="flex-1 bg-gold-600 text-white uppercase tracking-widest font-bold hover:bg-gold-700 transition rounded">Add to Cart</button>  
+                        </div>  
+                          
+                        <div class="flex gap-6 text-sm text-gray-500">  
+                            <span><i class="fas fa-truck mr-2"></i>Free Shipping</span>  
+                            <span><i class="fas fa-undo mr-2"></i>30 Days Return</span>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+        `;  
+    }  
+
+    function renderCart() {  
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);  
+          
+        return `  
+            <div class="max-w-4xl mx-auto px-4 py-12 min-h-screen">  
+                <h1 class="font-serif text-4xl mb-8 text-center">Shopping Cart</h1>  
+                  
+                ${cart.length === 0 ? `  
+                    <div class="text-center py-20">  
+                        <i class="fas fa-shopping-bag text-6xl text-gray-200 mb-6"></i>  
+                        <p class="text-gray-500 mb-6">Your cart is empty</p>  
+                        <button onclick="router('shop')" class="bg-gold-600 text-white px-8 py-3 uppercase tracking-widest font-bold hover:bg-gold-700 transition">Continue Shopping</button>  
+                    </div>  
+                ` : `  
+                    <div class="space-y-6">  
+                        ${cart.map(item => `  
+                            <div class="flex gap-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">  
+                                <img src="${item.image}" class="w-24 h-32 object-cover rounded" alt="${item.name}">  
+                                <div class="flex-1 flex flex-col justify-between">  
+                                    <div>  
+                                        <h3 class="font-serif text-xl mb-1">${item.name}</h3>  
+                                        <p class="text-gold-600 font-bold">$${item.price}</p>  
+                                    </div>  
+                                    <div class="flex justify-between items-center">  
+                                        <div class="flex items-center border rounded">  
+                                            <button onclick="updateQty(${item.id}, -1)" class="px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700">-</button>  
+                                            <span class="px-3">${item.qty}</span>  
+                                            <button onclick="updateQty(${item.id}, 1)" class="px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700">+</button>  
+                                        </div>  
+                                        <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>  
+                                    </div>  
+                                </div>  
+                            </div>  
+                        `).join('')}  
+                          
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mt-8">  
+                            <div class="flex justify-between mb-4 text-lg">  
+                                <span>Subtotal</span>  
+                                <span class="font-bold">$${subtotal.toFixed(2)}</span>  
+                            </div>  
+                            <button onclick="showToast('Checkout coming soon!')" class="w-full bg-gold-600 text-white py-4 uppercase tracking-widest font-bold hover:bg-gold-700 transition rounded">Proceed to Checkout</button>  
+                        </div>  
+                    </div>  
+                `}  
+            </div>  
+        `;  
+    }  
+
+    function renderAbout() {  
+        return `  
+            <div class="animate-fade-in">  
+                <div class="relative h-[60vh] flex items-center justify-center">  
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920" class="absolute inset-0 w-full h-full object-cover">  
+                    <div class="absolute inset-0 bg-black/50"></div>  
+                    <div class="relative z-10 text-center text-white px-4 scroll-reveal">  
+                        <h1 class="font-serif text-5xl md:text-7xl mb-4">Our Story</h1>  
+                        <p class="text-xl text-gold-400">Fashion With Passion</p>  
+                    </div>  
+                </div>  
+                  
+                <div class="max-w-4xl mx-auto px-4 py-20">  
+                    <div class="grid md:grid-cols-2 gap-12 items-center mb-20">  
+                        <div class="scroll-reveal">  
+                            <h2 class="font-serif text-3xl mb-6">Our Mission</h2>  
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">At Fashion With Clothes, we believe that style is a way to say who you are without having to speak. Our mission is to provide high-quality, sustainable fashion that empowers individuals to express their unique personality.</p>  
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Every piece in our collection is carefully curated to ensure it meets our standards of quality, sustainability, and timeless design.</p>  
+                        </div>  
+                        <div class="scroll-reveal">  
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" class="rounded-lg shadow-xl" alt="Our Mission">  
+                        </div>  
+                    </div>  
+                      
+                    <div class="grid grid-cols-3 gap-8 text-center py-12 border-t border-b border-gray-200 dark:border-gray-700">  
+                        <div class="scroll-reveal">  
+                            <h3 class="font-serif text-4xl text-gold-600 mb-2">10K+</h3>  
+                            <p class="text-sm uppercase tracking-widest">Happy Customers</p>  
+                        </div>  
+                        <div class="scroll-reveal">  
+                            <h3 class="font-serif text-4xl text-gold-600 mb-2">500+</h3>  
+                            <p class="text-sm uppercase tracking-widest">Products</p>  
+                        </div>  
+                        <div class="scroll-reveal">  
+                            <h3 class="font-serif text-4xl text-gold-600 mb-2">50+</h3>  
+                            <p class="text-sm uppercase tracking-widest">Brands</p>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+        `;  
+    }  
+
+    function renderContact() {  
+        return `  
+            <div class="max-w-7xl mx-auto px-4 py-12">  
+                <div class="text-center mb-16 scroll-reveal">  
+                    <h1 class="font-serif text-5xl mb-4">Get in Touch</h1>  
+                    <p class="text-gray-500">We'd love to hear from you</p>  
+                </div>  
+                  
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">  
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg scroll-reveal">  
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-6">  
+                            <div>  
+                                <label class="block text-sm font-bold uppercase tracking-widest mb-2">Name</label>  
+                                <input type="text" required class="w-full border-b-2 border-gray-300 dark:border-gray-600 py-2 focus:outline-none focus:border-gold-600 bg-transparent transition">  
+                            </div>  
+                            <div>  
+                                <label class="block text-sm font-bold uppercase tracking-widest mb-2">Email</label>  
+                                <input type="email" required class="w-full border-b-2 border-gray-300 dark:border-gray-600 py-2 focus:outline-none focus:border-gold-600 bg-transparent transition">  
+                            </div>  
+                            <div>  
+                                <label class="block text-sm font-bold uppercase tracking-widest mb-2">Message</label>  
+                                <textarea rows="4" required class="w-full border-b-2 border-gray-300 dark:border-gray-600 py-2 focus:outline-none focus:border-gold-600 bg-transparent transition"></textarea>  
+                            </div>  
+                            <button type="submit" class="w-full bg-gold-600 text-white py-4 uppercase tracking-widest font-bold hover:bg-gold-700 transition rounded">Send Message</button>  
+                        </form>  
+                    </div>  
+                      
+                    <div class="space-y-8 scroll-reveal">  
+                        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">  
+                            <h3 class="font-serif text-2xl mb-4">Visit Us</h3>  
+                            <p class="text-gray-600 dark:text-gray-300 mb-2"><i class="fas fa-map-marker-alt text-gold-600 mr-2"></i> 123 Fashion Avenue, New York, NY 10001</p>  
+                            <p class="text-gray-600 dark:text-gray-300 mb-2"><i class="fas fa-phone text-gold-600 mr-2"></i> +1 (555) 123-4567</p>  
+                            <p class="text-gray-600 dark:text-gray-300"><i class="fas fa-envelope text-gold-600 mr-2"></i> hello@fashionwithclothes.com</p>  
+                        </div>  
+                          
+                        <div class="h-64 bg-gray-200 rounded-lg overflow-hidden">  
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.217676750664!2d-73.98784408459418!3d40.75797467932688!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+        `;  
+    }  
+
+    // Components  
+    function productCard(product) {  
+        return `  
+            <div class="product-card group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition duration-300 scroll-reveal">  
+                <div class="relative aspect-[3/4] overflow-hidden cursor-pointer" onclick="router('product', ${product.id})">  
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition duration-500">  
+                    <div class="product-overlay absolute inset-0 bg-black/40 opacity-0 transition duration-300 flex items-center justify-center">  
+                        <button onclick="event.stopPropagation(); addToCart(${product.id}); showToast('Added to cart!')" class="bg-white text-black px-6 py-3 uppercase tracking-widest text-xs font-bold hover:bg-gold-600 hover:text-white transition transform translate-y-4 group-hover:translate-y-0">  
+                            Quick Add  
+                        </button>  
+                    </div>  
+                </div>  
+                <div class="p-4" onclick="router('product', ${product.id})">  
+                    <p class="text-xs text-gold-600 uppercase tracking-widest mb-1">${product.category}</p>  
+                    <h3 class="font-serif text-lg mb-1 group-hover:text-gold-600 transition">${product.name}</h3>  
+                    <p class="font-bold text-gray-900 dark:text-white">$${product.price}</p>  
+                </div>  
+            </div>  
+        `;  
+    }  
+
+    // Functions  
+    function filterProducts(category) {  
+        currentCategory = category;  
+          
+        // Update buttons  
+        document.querySelectorAll('.filter-btn').forEach(btn => {  
+            if (btn.dataset.category === category) {  
+                btn.classList.add('bg-gold-600', 'text-white');  
+                btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');  
+            } else {  
+                btn.classList.remove('bg-gold-600', 'text-white');  
+                btn.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');  
+            }  
+        });  
+          
+        // Filter products  
+        const filtered = category === 'All' || category === 'New Arrivals'   
+            ? products   
+            : products.filter(p => p.category === category);  
+          
+        const grid = document.getElementById('product-grid');  
+        if (grid) {  
+            grid.innerHTML = filtered.map(p => productCard(p)).join('');  
+            initScrollReveal();  
+        }  
+    }  
+
+    function addToCart(productId) {  
+        const product = products.find(p => p.id === productId);  
+        const existing = cart.find(item => item.id === productId);  
+          
+        if (existing) {  
+            existing.qty++;  
+        } else {  
+            cart.push({ ...product, qty: 1 });  
+        }  
+          
+        updateCartBadge();  
+    }  
+
+    function removeFromCart(productId) {  
+        cart = cart.filter(item => item.id !== productId);  
+        router('cart');  
+        updateCartBadge();  
+    }  
+
+    function updateQty(productId, change) {  
+        const item = cart.find(i => i.id === productId);  
+        if (item) {  
+            item.qty += change;  
+            if (item.qty <= 0) {  
+                removeFromCart(productId);  
+            } else {  
+                router('cart');  
+            }  
+        }  
+        updateCartBadge();  
+    }  
+
+    function updateCartBadge() {  
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);  
+        const badge = document.getElementById('cart-badge');  
+        badge.textContent = count;  
+        badge.classList.toggle('opacity-0', count === 0);  
+    }  
+
+    function selectSize(btn) {  
+        document.querySelectorAll('.size-btn').forEach(b => {  
+            b.classList.remove('bg-gold-600', 'text-white', 'border-gold-600');  
+            b.classList.add('border-gray-300', 'dark:border-gray-600');  
+        });  
+        btn.classList.remove('border-gray-300', 'dark:border-gray-600');  
+        btn.classList.add('bg-gold-600', 'text-white', 'border-gold-600');  
+    }  
+
+    function handleContactSubmit(e) {  
+        e.preventDefault();  
+        showToast('Message sent successfully!');  
+        e.target.reset();  
+    }  
+
+    function showToast(message) {  
+        const toast = document.getElementById('toast');  
+        document.getElementById('toast-message').textContent = message;  
+        toast.classList.remove('translate-y-24');  
+        setTimeout(() => toast.classList.add('translate-y-24'), 3000);  
+    }  
+
+    function toggleDarkMode() {  
+        document.documentElement.classList.toggle('dark');  
+    }  
+
+    function toggleMobileMenu() {  
+        document.getElementById('mobile-menu').classList.toggle('hidden');  
+    }  
+
+    function setupScrollListener() {  
+        const navbar = document.getElementById('navbar');  
+        const scrollTop = document.getElementById('scrollTop');  
+          
+        window.addEventListener('scroll', () => {  
+            if (window.scrollY > 100) {  
+                navbar.classList.add('shadow-md');  
+                scrollTop.classList.remove('opacity-0', 'invisible');  
+            } else {  
+                navbar.classList.remove('shadow-md');  
+                scrollTop.classList.add('opacity-0', 'invisible');  
+            }  
+        });  
+    }  
+
+    function initScrollReveal() {  
+        const observer = new IntersectionObserver((entries) => {  
+            entries.forEach(entry => {  
+                if (entry.isIntersecting) {  
+                    entry.target.classList.add('active');  
+                }  
+            });  
+        }, { threshold: 0.1 });  
+          
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));  
+    }  
+
+    function initHomeSlider() {  
+        // Simple fade effect for hero  
+        const slides = document.querySelectorAll('.hero-slide');  
+        let current = 0;  
+          
+        setInterval(() => {  
+            slides[current].classList.remove('active');  
+            current = (current + 1) % slides.length;  
+            slides[current].classList.add('active');  
+        }, 5000);  
+    }  
+
+    // Add animation styles  
+    const style = document.createElement('style');  
+    style.textContent = `  
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }  
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }  
+    `;  
+    document.head.appendChild(style);  
+</script>
+
+</body>  
+</html>
